@@ -1,5 +1,4 @@
 import React, { createContext, useState } from "react";
-import { fetchdata } from "../../utils/api";
 export const noteContext = createContext();
 
 const NoteState = (props) => {
@@ -8,6 +7,9 @@ const NoteState = (props) => {
   const [flag, setflag] = useState(true);
   const [alert, setalert] = useState(true);
   const [message, setmessage] = useState("welcome");
+  const [auth, setauth]  =useState(localStorage.getItem('token')?localStorage.getItem('token'):"");
+  const [token, settoken] = useState(auth.length!==0);
+  const [log, setlog] = useState(true); //success true;
 
   // add a note
   const addnote = async (newnote) => {  
@@ -17,14 +19,14 @@ const NoteState = (props) => {
       method: 'POST',
       headers: {
         "Content-Type": "application/json",
-        "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjVlNWE5ODZjNjhlY2Y1YzQ0NmFhYWI2In0sImlhdCI6MTcwOTU1NDY5OH0.sGzZgCOB2-npc1Fo8Rn6hn-tI9CiT3oZvwFNcN0LnI8"
+        "auth-token": auth,
       },
       body: JSON.stringify({ title, description, tag }),
     }
     const res = await fetch("http://localhost:5000/api/notes/addnote", options);
     const allnote = await res.json();
     setflag(true);
-    setnotes(notes.concat(newnote));
+    setnotes(allnote);
     console.log("added",allnote);
     setalert(true);
     setmessage("New Notes added...")
@@ -32,20 +34,27 @@ const NoteState = (props) => {
 
 
   const getnote = async () => {
+
     const options = {
       method: 'GET',
       headers: {
         "Content-Type": "application/json",
-        "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjVlNWE5ODZjNjhlY2Y1YzQ0NmFhYWI2In0sImlhdCI6MTcwOTU1NDY5OH0.sGzZgCOB2-npc1Fo8Rn6hn-tI9CiT3oZvwFNcN0LnI8",
+        "auth-token": auth,
       }
     }
+    console.log("getting notes",auth)
     const base_url = "http://localhost:5000/api/notes/fetchnotes";
+    try{
 
-    const res = await fetch(base_url, options);
-    const allnote = await res.json();
-    console.log("all notes: ",allnote)
-    setnotes(allnote);
-    setflag(true);
+      const res = await fetch(base_url, options);
+      const allnote = await res.json();
+      console.log("all notes: ",allnote)
+      setnotes(allnote);
+      setflag(true);
+    }catch(e){
+      setnotes([]);
+      console.log("log in")
+    }
   }
 
 
@@ -58,7 +67,7 @@ const NoteState = (props) => {
       method:'DELETE',
       headers:{
         "Content-Type": "application/json",
-        "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjVlNWE5ODZjNjhlY2Y1YzQ0NmFhYWI2In0sImlhdCI6MTcwOTU1NDY5OH0.sGzZgCOB2-npc1Fo8Rn6hn-tI9CiT3oZvwFNcN0LnI8",
+        "auth-token": auth,
       }
     }
     const base_url=`http://localhost:5000/api/notes/deletenote/${id}`;
@@ -84,7 +93,7 @@ const NoteState = (props) => {
       method:'PUT',
       headers:{
         "Content-Type": "application/json",
-        "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjVlNWE5ODZjNjhlY2Y1YzQ0NmFhYWI2In0sImlhdCI6MTcwOTU1NDY5OH0.sGzZgCOB2-npc1Fo8Rn6hn-tI9CiT3oZvwFNcN0LnI8",
+        "auth-token": auth,
       },
       body:JSON.stringify({title,description,tag}),
     }
@@ -112,6 +121,9 @@ const NoteState = (props) => {
         setflag,
         alert,setalert,
         message,setmessage,
+        token,settoken,
+        setauth,auth,
+        log,setlog,
 
       }}
     >
