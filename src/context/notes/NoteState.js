@@ -1,33 +1,35 @@
 import React, { createContext, useState } from "react";
 export const noteContext = createContext();
 
+
 const NoteState = (props) => {
 
   const [notes, setnotes] = useState(null);
   const [flag, setflag] = useState(true);
+
   const [alert, setalert] = useState(true);
   const [message, setmessage] = useState("welcome");
+
   const [auth, setauth]  =useState(localStorage.getItem('token')?localStorage.getItem('token'):"");
-  const [token, settoken] = useState(auth.length!==0);
   const [log, setlog] = useState(true); //success true;
+
 
   // add a note
   const addnote = async (newnote) => {  
-    const { title, description, tag } = newnote;
+  const { title, description, tag } = newnote;
    setflag(false);
+
     const options = {
       method: 'POST',
       headers: {
         "Content-Type": "application/json",
-        "auth-token": auth,
-      },
+        "auth-token": auth,},
       body: JSON.stringify({ title, description, tag }),
     }
     const res = await fetch("http://localhost:5000/api/notes/addnote", options);
     const allnote = await res.json();
     setflag(true);
     setnotes(allnote);
-    console.log("added",allnote);
     setalert(true);
     setmessage("New Notes added...")
   }
@@ -39,21 +41,16 @@ const NoteState = (props) => {
       method: 'GET',
       headers: {
         "Content-Type": "application/json",
-        "auth-token": auth,
+        "auth-token": auth,}
       }
-    }
-    console.log("getting notes",auth)
-    const base_url = "http://localhost:5000/api/notes/fetchnotes";
-    try{
 
-      const res = await fetch(base_url, options);
+    try{
+      const res = await fetch("http://localhost:5000/api/notes/fetchnotes", options);
       const allnote = await res.json();
-      console.log("all notes: ",allnote)
       setnotes(allnote);
       setflag(true);
-    }catch(e){
+    } catch(e){
       setnotes([]);
-      console.log("log in")
     }
   }
 
@@ -93,8 +90,7 @@ const NoteState = (props) => {
       method:'PUT',
       headers:{
         "Content-Type": "application/json",
-        "auth-token": auth,
-      },
+        "auth-token": auth,},
       body:JSON.stringify({title,description,tag}),
     }
     const base_url=`http://localhost:5000/api/notes/updatenote/${id}`;
@@ -111,17 +107,16 @@ const NoteState = (props) => {
   return (
     <noteContext.Provider
       value={{
-        notes,
-        setnotes,
+        notes,setnotes,
         addnote,
         deletenote,
         getnote,
         editnote,
-        flag,
-        setflag,
+        flag,setflag,
+
         alert,setalert,
         message,setmessage,
-        token,settoken,
+
         setauth,auth,
         log,setlog,
 

@@ -18,7 +18,7 @@ export default function Navbar() {
       e.preventDefault();
       setauth("");
       localStorage.setItem('token',"");
-      navigate("/login");
+      navigate("/signup");
     }
  
     // update state on toggle
@@ -51,7 +51,7 @@ export default function Navbar() {
                 <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
                   <li><Link to='/addnotes' className='text-lg'>Add Something</Link></li>
                   <li><Link to='/mynotes' className='text-lg'>My Library</Link></li>
-                  <li><Link to='/about' className='text-lg'>About</Link></li>
+                  {/* <li><Link to='/about' className='text-lg'>About</Link></li> */}
                   {/* <li tabIndex={0}>
                     <details>
                       <summary><Link to='/addnotes' className='text-lg'>Checkout</Link> </summary>
@@ -68,13 +68,13 @@ export default function Navbar() {
 
                 </ul>
               </div>
-              <a className="btn btn-ghost normal-case text-xl">M NoteBook</a>
+              <Link to='mynotes' className="btn btn-ghost normal-case text-xl">My Blog</Link>
             </div>
             <div className="navbar-center hidden lg:flex">
               <ul className="menu menu-horizontal p-0">
                 <li><Link to='/addnotes' className='text-lg'>Add Something</Link></li>
                 <li><Link   to='/mynotes' className='text-lg'>My Library</Link></li>
-                <li><Link to='/about' className='text-lg'>About me</Link></li>
+                {/* <li><Link to='/about' className='text-lg'>About me</Link></li> */}
                 {/* <li tabIndex={0}>
                     <details>
                       <summary><Link to='/addnotes' className='text-lg'>Checkout</Link> </summary>
@@ -119,14 +119,8 @@ export default function Navbar() {
                 </div>
               </label>
               <ul tabIndex={0} className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100  rounded-box w-52">
-                <li>
-                  <Link to="/about" className="justify-between">
-                    Profile
-                    <span className="badge">New</span>
-                  </Link>
-                </li>
-               {auth.length===0&&<li><Link  to='/signup'>Sign up</Link></li>}
-               {auth.length===0&&<li><Link to='/login'>Log in</Link></li>}
+              {auth.length!==0&& <li> <Link to="/contact" className="justify-between">Profile<span className="badge">New</span></Link> </li>}
+               {auth.length===0&&<li><Link to='/signup'>Log in</Link></li>}
                 {auth.length!==0&&<li><Link onClick={handlelogout} >Logout</Link></li>}
               </ul>
             </div>

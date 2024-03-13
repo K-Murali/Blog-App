@@ -6,8 +6,8 @@ import { FaRegEdit } from "react-icons/fa"
 
 const Noteitem = (props) => {
 
-  const {deletenote, editnote } = useContext(noteContext);
-  const [newnote, setnewnote] = useState({title:"",description:"",tag:""});
+  const {deletenote,editnote} = useContext(noteContext);
+  const [newnote,setnewnote] = useState({title:"",description:"",tag:""});
 
   const handledelete = () => {
     const b=confirm("Are you sure you want to delete?");
@@ -36,10 +36,10 @@ const Noteitem = (props) => {
 
   return  (
     <div className="flex items-center m-5 justify-center">
-      <div className="card  w-full bg-base-100 shadow-xl">
+      <div className="card   w-screen bg-base-100 shadow-xl">
         <div className="card-body">
           <h1 className="card-title">{props.title}</h1>
-          <p>{props.description}</p>
+          <p className="text-wrap ">{props.description}</p>
           <div className="card-actions flex justify-between  ">
           <div className="badge p-3 badge-accent">{props.tag}</div>
 
